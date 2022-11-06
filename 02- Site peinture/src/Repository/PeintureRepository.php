@@ -24,6 +24,18 @@ class PeintureRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Peinture[] Returns an array of peinture objects
+     */
+    public function lastFour()
+    {
+        return $this->createQueryBuilder('p')
+                    ->orderBy('p.id', 'DESC')
+                    ->setMaxResults(4)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    /**
      * @throws ORMException
      * @throws OptimisticLockException
      */

@@ -24,6 +24,18 @@ class BlogpostRepository extends ServiceEntityRepository
     }
 
     /**
+     * @return Blogpost[] Returns an array of Blogpost objects
+     */
+    public function lastThree()
+    {
+        return $this->createQueryBuilder('b')
+                    ->orderBy('b.id', 'DESC')
+                    ->setMaxResults(3)
+                    ->getQuery()
+                    ->getResult();
+    }
+
+    /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
