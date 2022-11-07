@@ -1,0 +1,48 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Réalisations{% endblock %}
+
+{% block body %}
+    <section class="pt-7 pt-md-10">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-0">
+                        Dernières réalisations
+                    </h2>
+                    <p class="mb-5 text-muted">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, maxime. Iste ratione sed unde tempora!
+                    </p>
+                </div>
+
+                {% for peinture in peintures %}
+                    <div class="col-12 col-md-6 d-flex mb-4">
+                        <div class="card mb-6 shadow-light-lg lift lift-lg">
+                            <a href="" class="card-img-top text-decoration-none">
+                                <img src="{{ asset(peinture.file) }}" alt="" class="card-img-top">
+                            </a>
+                            <a href="" class="card-body text-decoration-none">
+                                <h3>
+                                    {{ peinture.nom }}
+                                </h3>
+                                <p class="mb-0 text-muted">
+                                    {{ peinture.description|u.truncate(200, '...', false) }}
+                                </p>
+                            </a>
+                            <a href="" class="cart-meta mt-auto text-decoration-none">
+                                <hr class="card-meta-divider">
+                                <p class="h6 text-uppercase text-muted mb-0 ms-auto">
+                                    <time>Ajoutée le {{ peinture.createdAt|date('d/m/Y') }}</time>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="d-flex justify-content-center">
+                    {% do peintures.setPageRange(2) %}
+                    {{ knp_pagination_render(peintures, 'base/pagination.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
