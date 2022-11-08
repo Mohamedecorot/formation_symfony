@@ -27,6 +27,18 @@ class UserRepository extends ServiceEntityRepository implements PasswordUpgrader
     }
 
     /**
+     * Pour récupérer le peintre
+     */
+    public function getPeintre(){
+        return $this->createQueryBuilder('u')
+        ->where('u.roles LIKE :roles')
+        ->setParameter('roles', '%"ROLE_PEINTRE"%')
+        ->getQuery()
+        ->getOneOrNullResult();
+    }
+
+
+    /**
      * @throws ORMException
      * @throws OptimisticLockException
      */
