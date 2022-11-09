@@ -18,10 +18,10 @@
                 {% for peinture in peintures %}
                     <div class="col-12 col-md-6 d-flex mb-4">
                         <div class="card mb-6 shadow-light-lg lift lift-lg">
-                            <a href="" class="card-img-top text-decoration-none">
+                            <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" class="card-img-top text-decoration-none">
                                 <img src="{{ asset(peinture.file) }}" alt="" class="card-img-top">
                             </a>
-                            <a href="" class="card-body text-decoration-none">
+                            <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" class="card-body text-decoration-none">
                                 <h3>
                                     {{ peinture.nom }}
                                 </h3>
@@ -29,7 +29,7 @@
                                     {{ peinture.description|u.truncate(200, '...', false) }}
                                 </p>
                             </a>
-                            <a href="" class="cart-meta mt-auto text-decoration-none">
+                            <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" class="cart-meta mt-auto text-decoration-none">
                                 <hr class="card-meta-divider">
                                 <p class="h6 text-uppercase text-muted mb-0 ms-auto">
                                     <time>Ajoutée le {{ peinture.createdAt|date('d/m/Y') }}</time>

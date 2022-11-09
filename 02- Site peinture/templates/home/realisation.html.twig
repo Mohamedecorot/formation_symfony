@@ -7,13 +7,15 @@
       <div class="card mb-3" style="max-width: 540px;">
         <div class="row g-0">
           <div class="col-md-4">
-            <img src="{{ peinture.file }}" class="img-fluid rounded-start" alt="...">
+            <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" >
+              <img src="{{ peinture.file }}" class="img-fluid rounded-start" alt="...">
+            </a>
           </div>
           <div class="col-md-8">
             <div class="card-body">
               <h5 class="card-title">{{ peinture.nom }}</h5>
               <p class="card-text">{{ peinture.description|u.truncate(100, '...', false) }}</p>
-              <a href="" class="card-meta text-decoration-none">
+              <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" class="card-meta text-decoration-none">
                 <p class="h6 text-uppercase text-muted mb-0 ms-auto">
                   <time>Ajoutée le {{ peinture.createdAt|date('d/m/Y') }}</time>
                 </p>

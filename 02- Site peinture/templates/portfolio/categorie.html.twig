@@ -1,0 +1,47 @@
+{% extends 'base.html.twig' %}
+
+{% block title %} {{ categorie.nom }} {% endblock %}
+
+{% block body %}
+    {# WELCOME #}
+    {% set img = categorie.peintures|last %}
+    <section class="pt-12 pt-md-14 pb-12 pb-pd-15 overlay overlay-black" data-jarallax data-speed=".8">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-6 text-center">
+                    <h1 class="display-2 fw-bold text-white">
+                        {{ categorie.nom }}
+                    </h1>
+                    <p class="lead text-white-75 mb-4">
+                        {{ categorie.description }}
+                    </p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# SHAPE #}
+    <div class="position-relative">
+        <div class="shape shape-bottom shape-fluide-x svg-shim text-light">
+            <svg viewBox="0 0 2000 48" fill="none" xmins="http://www/w3.org/2000/svg"></svg>
+        </div>
+    </div>
+
+    {# CONTENT #}
+    <section class="py-8 py-md-11 mt-n10 mt-md-n14">
+        <div class="container">
+            <div class="row" id="porfolio" data-isotope='{"layoutMode": "fitRows"}'>
+
+                {% for peinture in peintures %}
+                    <div class="col-12 col-md-4">
+                        <a href="" class="text-decoration-none card shadow-light-lg mb-7" data-big="{"imgSrc": "{{ peinture.file }}"}">
+                            <div class="card-zoom">
+                                <img src="{{ peinture.file }} " alt="..." class="card-img">
+                            </div>
+                        </a>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

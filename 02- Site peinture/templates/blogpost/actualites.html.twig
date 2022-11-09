@@ -18,7 +18,7 @@
                 {% for blogpost in blogposts %}
                     <div class="col-12 col-lg-4 d-flex mb-4">
                         <div class="card shadow-light-lg lift lift-lg m-2">
-                            <a href="" class="card-body my-auto text-decoration-none">
+                            <a href="{{ path('actualites_detail', {'slug': blogpost.slug}) }}" class="card-body my-auto text-decoration-none">
                                 <h3 class="mt-auto">
                                     {{ blogpost.titre }}
                                 </h3>
@@ -26,7 +26,7 @@
                                     {{ blogpost.contenu|u.truncate(150, '...', false) }}
                                 </p>
                             </a>
-                            <a href="" class="cart-meta text-decoration-none">
+                            <a href="{{ path('actualites_detail', {'slug': blogpost.slug}) }}" class="cart-meta text-decoration-none">
                                 <hr class="card-meta-divider">
                                 <p class="h6 text-uppercase text-muted mb-0 ms-auto">
                                     <time>Publiée le {{ blogpost.createdAt|date('d/m/Y') }}</time>

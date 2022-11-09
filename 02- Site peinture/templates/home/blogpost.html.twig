@@ -8,7 +8,7 @@
         <div class="card-body">
           <h5 class="card-title">{{ blogpost.titre }}</h5>
           <p class="card-text">{{ blogpost.contenu|u.truncate(200, '...', false) }}</p>
-          <a href="" class="card-meta text-decoration-none">
+          <a href="{{ path('actualites_detail', {'slug': blogpost.slug}) }}" class="card-meta text-decoration-none">
             <hr class="card-meta-divider">
             <p class="h6 text-uppercase text-muted mb-0 ms-auto">
               <time>Publiée le {{ blogpost.createdAt|date('d/m/Y') }}</time>
