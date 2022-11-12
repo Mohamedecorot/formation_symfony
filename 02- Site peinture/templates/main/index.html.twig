@@ -1,0 +1,22 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{% trans %}Home page{% endtrans %}{% endblock %}
+
+{% block body %}
+    <h1 class="text-center">{% trans %}All article{% endtrans %}</h1>
+    <div class="container">
+        {% for article in articles %}
+        <h4><a href="{{ path('article', {"slug": article.slug}) }}">{{ article.titre }}</a></h4>
+        <p>{% trans %}Published on{% endtrans %} {{ article.createdAt|date('d/m/Y à h\\hi') }}</p>
+        <p>
+            {% for categorie in article.categories %}
+                {{ categorie.nom }}
+            {% endfor %}
+        </p>
+        <p>
+            <img src="{{ vich_uploader_asset(article, 'imageFile')|imagine_filter('echelle') }}" alt="{{ article.titre }}">
+        </p>
+        <div>{{ article.contenu|raw }}</div>
+    {% endfor %}
+    </div>
+{% endblock %}

@@ -2,34 +2,45 @@
 
 namespace App\Controller;
 
-use App\Entity\Contact;
 use App\Form\ContactType;
-use App\Service\ContactService;
-use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\Routing\Annotation\Route;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Component\HttpFoundation\Request;
+use Symfony\Component\Routing\Annotation\Route;
 
 class ContactController extends AbstractController
 {
-    #[Route('/contact', name: 'contact')]
-    public function index(Request $request, ContactService $contactService): Response
+    /**
+     * @Route("/contact", name="contact")
+     */
+    public function index(Request $request,\Swift_Mailer $mailer)
     {
-        $contact = new Contact();
-
-        $form = $this->createForm(ContactType::class, $contact);
+        $form = $this->createForm(ContactType::class);
         $form->handleRequest($request);
 
-        if($form->isSubmitted() && $form->isValid()){
-            $contact= $form->getData();
+        if ($form->isSubmitted() && $form->isValid()) {
+            $contact = $form->getData();
 
-            $contactService->persistContact($contact);
+            // On crée le message
+            $message = (new \Swift_Message('Nouveau contact'))
+                // On attribue l'expéditeur
+                ->setFrom($contact['email'])
+                // On attribue le destinataire
+                ->setTo('votre@adresse.fr')
+                // On crée le texte avec la vue
+                ->setBody(
+                    $this->renderView(
+                        'emails/contact.html.twig', compact('contact')
+                    ),
+                    'text/html'
+                )
+            ;
+            //On envoie le message
+            $mailer->send($message);
 
-            return $this->redirectToRoute('contact');
+            $this->addFlash('message', 'Votre message a été transmis, nous vous répondrons dans les meilleurs délais.'); // Permet un message flash de renvoi
+            return $this->redirectToRoute('accueil');
         }
-
-        return $this->render('contact/index.html.twig', [
-            'form' => $form->createView(),
-        ]);
+        return $this->render('contact/index.html.twig',['contactForm' => $form->createView()]);
     }
+
 }
