@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Mon portfolio{% endblock %}
+
+{% block body %}
+    {# WELCOME #}
+    <section class="pt-12 pt-md-14 pb-12 pb-pd-15 bg-gray-900" style="margin-top: -87px;">
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-12 col-md-10 col-lg-6 text-center">
+                    <h1 class="display-2 fw-bold text-white">
+                        Portfolio
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    {# SHAPE #}
+    <div class="position-relative">
+        <div class="shape shape-bottom shape-fluide-x svg-shim text-light">
+            <svg viewBox="0 0 2000 48" fill="none" xmins="http://www/w3.org/2000/svg"></svg>
+        </div>
+    </div>
+
+    {# CONTENT #}
+    <section class="py-8 py-md-11 mt-n10 mt-md-n14">
+        <div class="container">
+            <div class="row" id="porfolio" data-isotope='{"layoutMode": "fitRows"}'>
+
+                {% for categorie in categories %}
+                    {% set peinture = categorie.peintures|last %}
+                    <div class="col-12 col-md-4 us shadow m-0" data-mdb-ripple-color="light">
+                        <a href="{{ path('portfolio_categorie', {'slug': categorie.slug}) }}" class="text-decoration-none card lift lift-lg shadow-light-lg mb-7">
+                            <img src="{{ vich_uploader_asset(peinture, 'imageFile') }} " alt="" class="card-img-top">
+                        </a>
+                        <div class="card-body">
+                            <div class="shape shape bottom-100 shape-fluid-x svg-shim text-white">
+                                <svg viewBox="0 0 2880 48" fill="none" xmins="http://www.w3.org/2000/svg"></svg>
+                            </div>
+                            <h4 class="mb-0">{{ categorie.nom }}</h4>
+                            <small>{{ categorie.description }}</small>
+                        </div>
+                    </div>
+                {% endfor %}
+            </div>
+        </div>
+    </section>
+{% endblock %}

@@ -1,60 +1,74 @@
-{% extends 'base.html.twig' %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-0evHe/X+R7YkIZDRvuzKMRqM+OrBnVFBL6DOitfPri4tjfHxaWutUpFmBp4vmVor" crossorigin="anonymous">
+    <title>Connexion</title>
+</head>
+<body>
+    <div class="containr">
+        <section class="vh-100">
+            <div class="container-fluid">
+              <div class="row">
+                <div class="col-sm-6 text-black">
 
-{% block title %}{% trans %}Log in{% endtrans %}{% endblock %}
+                  <div class="px-5 ms-xl-4">
+                    <i class="fas fa-crow fa-2x me-3 pt-5 mt-xl-4" style="color: #709085;"></i>
+                    <span class="h1 fw-bold mb-0">My Artist</span>
+                  </div>
 
-{% block body %}
-    <div class="container">
-        {% for message in app.flashes('message') %}
-            <div class="alert alert-success" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('danger') %}
-            <div class="alert alert-danger" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
-        {% for message in app.flashes('warning') %}
-            <div class="alert alert-warning" role="alert">
-                {{ message }}
-            </div>
-        {% endfor %}
+                  <div class="d-flex align-items-center h-custom-2 px-5 ms-xl-4 mt-5 pt-5 pt-xl-0 mt-xl-n5">
 
-        <form method="post">
-            {% if error %}
-                <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
-            {% endif %}
+                    <form method="post">
+                      {% if error %}
+                          <div class="alert alert-danger">{{ error.messageKey|trans(error.messageData, 'security') }}</div>
+                      {% endif %}
 
-            {% if app.user %}
-                <div class="mb-3">
-                    {% trans %}You are logged in as{% endtrans %} {{ app.user.username }}, <a href="{{ path('app_logout') }}">{% trans %}Logout{% endtrans %}</a>
+                      {% if app.user %}
+                          <div class="mb-3">
+                              You are logged in as {{ app.user.username }}, <a href="{{ path('app_logout') }}">Logout</a>
+                          </div>
+                      {% endif %}
+
+                      <h1 class="h3 mb-3 font-weight-normal">Connexion</h1>
+                      <label for="inputEmail">Email</label>
+                      <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="form-control form-control-lg" autocomplete="email" required autofocus>
+                      <label for="inputPassword">Mot de passe</label>
+                      <input type="password" name="password" id="inputPassword" class="form-control form-control-lg mb-3" autocomplete="current-password" required>
+
+                      <input type="hidden" name="_csrf_token"
+                             value="{{ csrf_token('authenticate') }}"
+                      >
+
+                      {#
+                          Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
+                          See https://symfony.com/doc/current/security/remember_me.html
+
+                          <div class="checkbox mb-3">
+                              <label>
+                                  <input type="checkbox" name="_remember_me"> Remember me
+                              </label>
+                          </div>
+                      #}
+
+                      <button class="btn btn-lg btn-primary" type="submit">
+                          Se connecter
+                      </button>
+                  </form>
+
+                  </div>
+
                 </div>
-            {% endif %}
-
-            <h1 class="text-center mt-3 h3 mb-3 font-weight-normal">{% trans %}Thanks to connect{% endtrans %}</h1>
-            <label for="inputEmail">Email</label>
-            <input type="email" value="{{ last_username }}" name="email" id="inputEmail" class="mb-3 form-control" autocomplete="email" required autofocus>
-            <label for="inputPassword">Password</label>
-            <input type="password" name="password" id="inputPassword" class="form-control mb-3" autocomplete="current-password" required>
-
-            <input type="hidden" name="_csrf_token"
-                   value="{{ csrf_token('authenticate') }}"
-            >
-
-            {#
-                Uncomment this section and add a remember_me option below your firewall to activate remember me functionality.
-                See https://symfony.com/doc/current/security/remember_me.html
-
-                <div class="checkbox mb-3">
-                    <label>
-                        <input type="checkbox" name="_remember_me"> Remember me
-                    </label>
+                <div class="col-sm-6 px-0 d-none d-sm-block">
+                  <img src="https://mdbcdn.b-cdn.net/img/Photos/new-templates/bootstrap-login-form/img3.webp"
+                    alt="Login image" class="w-100 vh-100" style="object-fit: cover; object-position: left;">
                 </div>
-            #}
-
-            <button class="btn btn-lg btn-primary" type="submit">
-                {% trans %}Sign in{% endtrans %}
-            </button>
-        </form>
+              </div>
+            </div>
+        </section>
     </div>
-{% endblock %}
+</body>
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.0-beta1/dist/js/bootstrap.bundle.min.js" integrity="sha384-pprn3073KE6tl6bjs2QrFaJGz5/SUsLqktiwsUTF55Jfv3qYSDhgCecCxMW52nD2" crossorigin="anonymous"></script>
+</html>

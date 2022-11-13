@@ -1,0 +1,30 @@
+<div class="container">
+  <h2>Dernières réalisations</h2>
+  <p>Lorem ipsum dolor sit amet consectetur adipisicing elit. Asperiores, quisquam?</p>
+  <div class="row">
+    {% for peinture in peintures %}
+    <div class="col-lg-6 mb-4">
+      <div class="card mb-3" style="max-width: 540px;">
+        <div class="row g-0">
+          <div class="col-md-4">
+            <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" >
+              <img src="{{ vich_uploader_asset(peinture, 'imageFile') }}" class="img-fluid rounded-start" alt="...">
+            </a>
+          </div>
+          <div class="col-md-8">
+            <div class="card-body">
+              <h5 class="card-title">{{ peinture.nom }}</h5>
+              <p class="card-text">{{ peinture.description|u.truncate(100, '...', false) }}</p>
+              <a href="{{ path('realisations_details', {'slug': peinture.slug}) }}" class="card-meta text-decoration-none">
+                <p class="h6 text-uppercase text-muted mb-0 ms-auto">
+                  <time>Ajoutée le {{ peinture.createdAt|date('d/m/Y') }}</time>
+                </p>
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    {% endfor %}
+  </div>
+</div>

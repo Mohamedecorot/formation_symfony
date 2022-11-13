@@ -1,0 +1,45 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Actualités{% endblock %}
+
+{% block body %}
+    <section class="pb-8 pt-7 pb-md-11 pt-md-10">
+        <div class="container">
+            <div class="row">
+                <div class="col-12">
+                    <h2 class="mb-0">
+                        Dernières actualités
+                    </h2>
+                    <p class="mb-5 text-muted">
+                        Lorem ipsum dolor sit amet, consectetur adipisicing elit. Et, maxime. Iste ratione sed unde tempora!
+                    </p>
+                </div>
+
+                {% for blogpost in blogposts %}
+                    <div class="col-12 col-lg-4 d-flex mb-4">
+                        <div class="card shadow-light-lg lift lift-lg m-2">
+                            <a href="{{ path('actualites_detail', {'slug': blogpost.slug}) }}" class="card-body my-auto text-decoration-none">
+                                <h3 class="mt-auto">
+                                    {{ blogpost.titre }}
+                                </h3>
+                                <p class="mb-0 text-muted">
+                                    {{ blogpost.contenu|u.truncate(150, '...', false) }}
+                                </p>
+                            </a>
+                            <a href="{{ path('actualites_detail', {'slug': blogpost.slug}) }}" class="cart-meta text-decoration-none">
+                                <hr class="card-meta-divider">
+                                <p class="h6 text-uppercase text-muted mb-0 ms-auto">
+                                    <time>Publiée le {{ blogpost.createdAt|date('d/m/Y') }}</time>
+                                </p>
+                            </a>
+                        </div>
+                    </div>
+                {% endfor %}
+                <div class="d-flex justify-content-center">
+                    {% do blogposts.setPageRange(2) %}
+                    {{ knp_pagination_render(blogposts, 'base/pagination.html.twig') }}
+                </div>
+            </div>
+        </div>
+    </section>
+{% endblock %}
