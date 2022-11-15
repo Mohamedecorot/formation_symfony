@@ -8,6 +8,7 @@ use App\Entity\Peinture;
 use App\Entity\User;
 use DateTime;
 use PHPUnit\Framework\TestCase;
+use Symfony\Component\HttpFoundation\File\File;
 
 class PeintureUnitTest extends TestCase
 {
@@ -99,6 +100,7 @@ class PeintureUnitTest extends TestCase
         $this->assertEmpty($peinture->getSlug());
         $this->assertEmpty($peinture->getFile());
         $this->assertEmpty($peinture->getPrix());
+        $this->assertEmpty($peinture->getImageFile());
         $this->assertEmpty($peinture->getCategorie());
         $this->assertEmpty($peinture->getUser());
     }
