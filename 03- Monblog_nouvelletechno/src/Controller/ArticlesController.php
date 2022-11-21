@@ -21,7 +21,7 @@ class ArticlesController extends AbstractController
     public function index(Request $request, PaginatorInterface $paginator) // Nous ajoutons les paramètres requis
     {
         // Méthode findBy qui permet de récupérer les données avec des critères de filtre et de tri
-        $donnees = $this->getDoctrine()->getRepository(Articles::class)->findBy([],['created_at' => 'desc']);
+        $donnees = $this->getDoctrine()->getRepository(Articles::class)->findBy([], ['created_at' => 'desc']);
 
         $articles = $paginator->paginate(
             $donnees, // Requête contenant les données à paginer (ici nos articles)
@@ -32,5 +32,20 @@ class ArticlesController extends AbstractController
         return $this->render('articles/index.html.twig', [
             'articles' => $articles,
         ]);
+    }
+
+    /**
+     * @Route("/{slug}", name="article")
+     */
+    public function article($slug)
+    {
+        // On récupère l'article correspondant au slug
+        $article = $this->getDoctrine()->getRepository(Articles::class)->findOneBy(['slug' => $slug]);
+        if (!$article) {
+            // Si aucun article n'est trouvé, nous créons une exception
+            throw $this->createNotFoundException('L\'article n\'existe pas');
+        }
+        // Si l'article existe nous envoyons les données à la vue
+        return $this->render('articles/article.html.twig', compact('article'));
     }
 }
