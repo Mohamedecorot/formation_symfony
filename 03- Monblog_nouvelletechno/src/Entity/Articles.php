@@ -73,6 +73,10 @@ class Articles
      */
     private $imageFile;
 
+    /**
+     * @ORM\ManyToOne(targetEntity="App\Entity\Users", inversedBy="articles")
+     * @ORM\JoinColumn(nullable=false)
+     */
     private $users;
 
     /**
