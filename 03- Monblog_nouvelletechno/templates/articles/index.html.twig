@@ -3,7 +3,8 @@
 {% block title %}Liste des articles{% endblock %}
 
 {% block body %}
-    <h1>Liste des articles</h1>
+<div class="container mt-5">
+    <h1 class="text-center">Liste des articles</h1>
     {% for message in app.flashes('message') %}
         <div class="alert alert-success" role="alert">
             {{ message }}
@@ -11,8 +12,9 @@
     {% endfor %}
 
     {% for article in articles %}
-        <h2><a href="{{ path('actualites_article', {'slug': article.slug}) }}">{{ article.titre }}</a></h2>
+        <h2><a href="{{ path('article', {'slug': article.slug}) }}">{{ article.titre }}</a></h2>
         <div>{{ article.contenu|raw }}</div>
     {% endfor %}
     {{ knp_pagination_render(articles) }}
+</div>
 {% endblock %}

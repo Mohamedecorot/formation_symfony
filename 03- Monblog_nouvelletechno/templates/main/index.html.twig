@@ -1,10 +1,19 @@
 {% extends 'base.html.twig' %}
 
-{% block title %}Mon Blog{% endblock %}
+{% block title %}Accueil{% endblock %}
 
 {% block body %}
-    <h1>Mon Blog</h1>
-    <p>Ceci est la page d'accueil</p>
-
-    <p><a href="{{ path('actualites_articles') }}">Liste des articles</a></p>
+    <h1 class="text-center">Tous les articles</h1>
+    <div class="container">
+        {% for article in articles %}
+        <h4><a href="{{ path('article', {"slug": article.slug}) }}">{{ article.titre }}</a></h4>
+        <p>Publié le {{ article.createdAt|date('d/m/Y à h\\hi') }}</p>
+        <p>
+            {% for categorie in article.categories %}
+                {{ categorie.nom }}
+            {% endfor %}
+        </p>
+        <div>{{ article.contenu|raw }}</div>
+    {% endfor %}
+    </div>
 {% endblock %}

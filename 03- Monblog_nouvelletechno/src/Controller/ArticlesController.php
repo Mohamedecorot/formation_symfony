@@ -13,15 +13,11 @@ use Symfony\Contracts\Translation\TranslatorInterface;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
-/**
- * Class ArticlesController
- * @package App\Controller
- * @Route("/actualites", name="actualites_")
- */
+
 class ArticlesController extends AbstractController
 {
     /**
-     * @Route("/", name="articles")
+     * @Route("/articles", name="articles")
      */
     public function index(Request $request, PaginatorInterface $paginator) // Nous ajoutons les paramètres requis
     {

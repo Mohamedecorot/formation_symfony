@@ -3,7 +3,6 @@
 {% block title %}{{ article.titre }}{% endblock %}
 
 {% block body %}
-    <h1>{{ article.id }}</h1>
     <h1>{{ article.titre }}</h1>
     <p>{{ article.createdAt|date }} - Commentaires : {{ commentaires|length }}</p>
     <div>{{ article.contenu|raw }}</div>
@@ -13,7 +12,7 @@
             {{ categorie.nom }}
         {% endfor %}
     </p>
-    {{ dump(commentaires) }}
+
     <h2>Commentaires</h2>
     {% for commentaire in commentaires %}
         <p>Commentaire écrit par {{ commentaire.pseudo }} le {{ commentaire.createdAt|date }}</p>
