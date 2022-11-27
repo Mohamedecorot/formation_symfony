@@ -3,24 +3,31 @@
 {% block title %}{{ article.titre }}{% endblock %}
 
 {% block body %}
-    <h1>{{ article.titre }}</h1>
-    <p>{{ article.createdAt|date }} - Commentaires : {{ commentaires|length }}</p>
-    <div>{{ article.contenu|raw }}</div>
+    <div class="container">
+        <h1 class="text-center mt-5">{{ article.titre }}</h1>
+        <p>{{ article.createdAt|date }} - Commentaires : {{ commentaires|length }}</p>
 
-    <p>Catégories :
-        {% for categorie in article.categories %}
-            {{ categorie.nom }}
+        <p>
+            <img src="{{ vich_uploader_asset(article, 'imageFile')|imagine_filter('carre')  }}" alt="{{ article.titre }}">
+        </p>
+
+        <div>{{ article.contenu|raw }}</div>
+
+        <p>Catégories :
+            {% for categorie in article.categories %}
+                {{ categorie.nom }}
+            {% endfor %}
+        </p>
+
+        <h2 class="text-center mt-5">Commentaires</h2>
+        {% for commentaire in commentaires %}
+            <p>Commentaire écrit par {{ commentaire.pseudo }} le {{ commentaire.createdAt|date }}</p>
+            <p>{{ commentaire.contenu }}</p>
+        {% else %}
+            <p>Il n'y a pas encore de commentaire, publiez le premier !</p>
         {% endfor %}
-    </p>
 
-    <h2>Commentaires</h2>
-    {% for commentaire in commentaires %}
-        <p>Commentaire écrit par {{ commentaire.pseudo }} le {{ commentaire.createdAt|date }}</p>
-        <p>{{ commentaire.contenu }}</p>
-    {% else %}
-        <p>Il n'y a pas encore de commentaire, publiez le premier !</p>
-    {% endfor %}
-
-    <h2>Ajouter un commentaire</h2>
-    {{ form(commentForm) }}
+        <h2>Ajouter un commentaire</h2>
+        {{ form(commentForm) }}
+    </div>
 {% endblock %}
