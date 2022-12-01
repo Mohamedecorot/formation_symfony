@@ -10,13 +10,35 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Contracts\Translation\TranslatorInterface;
+use App\Notifications\NouveauCompteNotification;
+use App\Notifications\ActivationCompteNotification;
 use Symfony\Component\Security\Guard\GuardAuthenticatorHandler;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class RegistrationController extends AbstractController
 {
+    /**
+     * @var NouveauCompteNotification
+     */
+    private $notify_creation;
+
+    /**
+     * @var ActivationCompteNotification
+     */
+    private $notify_activation;
+
+    /**
+     * RegistrationController constructor.
+     * @param NouveauCompteNotification $notify_creation
+     */
+    public function __construct(NouveauCompteNotification $notify_creation, ActivationCompteNotification $notify_activation)
+    {
+        $this->notify_creation = $notify_creation;
+        $this->notify_activation = $notify_activation;
+    }
+
+
     /**
      * @Route("/inscription", name="app_register")
      */
@@ -40,22 +62,30 @@ class RegistrationController extends AbstractController
 
             $entityManager->persist($user);
             $entityManager->flush();
+
             // do anything else you need here, like send an email
-            // On crée le message
-            $message = (new \Swift_Message('Nouveau compte'))
-            // On attribue l'expéditeur
-            ->setFrom('votre@adresse.fr')
-            // On attribue le destinataire
-            ->setTo($user->getEmail())
-            // On crée le texte avec la vue
-            ->setBody(
-                $this->renderView(
-                    'emails/activation.html.twig', ['token' => $user->getActivationToken()]
-                ),
-                'text/html'
-            )
-            ;
-            $mailer->send($message);
+            // Envoie le mail d'inscription à l'administrateur
+            $this->notify_creation->notify();
+
+            // Envoie le mail d'activation
+            $this->notify_activation->notify($user);
+
+
+            // // On crée le message
+            // $message = (new \Swift_Message('Activation de votre compte'))
+            // // On attribue l'expéditeur
+            // ->setFrom('votre@adresse.fr')
+            // // On attribue le destinataire
+            // ->setTo($user->getEmail())
+            // // On crée le texte avec la vue
+            // ->setBody(
+            //     $this->renderView(
+            //         'emails/activation.html.twig', ['token' => $user->getActivationToken()]
+            //     ),
+            //     'text/html'
+            // )
+            // ;
+            // $mailer->send($message);
 
 
             return $guardHandler->authenticateUserAndHandleSuccess(
