@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\AnnoncesRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: AnnoncesRepository::class)]
 class Annonces
@@ -17,12 +18,24 @@ class Annonces
     #[ORM\Column(length: 255)]
     private ?string $title = null;
 
+    /**
+     * @var string|null
+     *
+     * @Gedmo\Slug(fields={"title"})
+     * @ORM\Column(length=255)
+     */
+    #[Gedmo\Slug(fields: ["title"])]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
     #[ORM\Column(type: Types::TEXT)]
     private ?string $content = null;
 
+    /**
+     * @Gedmo\Timestampable(on="create")
+     * @ORM\Column(type="datetime")
+     */
+    #[Gedmo\Timestampable(on: "create")]
     #[ORM\Column(type: Types::DATETIME_MUTABLE)]
     private ?\DateTimeInterface $created_at = null;
 
@@ -36,6 +49,11 @@ class Annonces
     #[ORM\ManyToOne(inversedBy: 'annonces')]
     #[ORM\JoinColumn(nullable: false)]
     private ?Categories $categories = null;
+
+    public function __toString()
+    {
+        return $this->name;
+    }
 
     public function getId(): ?int
     {
@@ -59,13 +77,6 @@ class Annonces
         return $this->slug;
     }
 
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
-    }
-
     public function getContent(): ?string
     {
         return $this->content;
@@ -81,13 +92,6 @@ class Annonces
     public function getCreatedAt(): ?\DateTimeInterface
     {
         return $this->created_at;
-    }
-
-    public function setCreatedAt(\DateTimeInterface $created_at): self
-    {
-        $this->created_at = $created_at;
-
-        return $this;
     }
 
     public function isActive(): ?bool

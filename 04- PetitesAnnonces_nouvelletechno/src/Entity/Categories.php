@@ -6,6 +6,7 @@ use App\Repository\CategoriesRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
+use Gedmo\Mapping\Annotation as Gedmo;
 
 #[ORM\Entity(repositoryClass: CategoriesRepository::class)]
 class Categories
@@ -18,6 +19,13 @@ class Categories
     #[ORM\Column(length: 100)]
     private ?string $name = null;
 
+    /**
+     * @var string|null
+     *
+     * @Gedmo\Slug(fields={"name"})
+     * @ORM\Column(length=255)
+     */
+    #[Gedmo\Slug(fields: ["name"])]
     #[ORM\Column(length: 255)]
     private ?string $slug = null;
 
@@ -34,6 +42,12 @@ class Categories
     {
         $this->categories = new ArrayCollection();
         $this->annonces = new ArrayCollection();
+    }
+
+
+    public function __toString()
+    {
+        return $this->name;
     }
 
     public function getId(): ?int
@@ -56,13 +70,6 @@ class Categories
     public function getSlug(): ?string
     {
         return $this->slug;
-    }
-
-    public function setSlug(string $slug): self
-    {
-        $this->slug = $slug;
-
-        return $this;
     }
 
     public function getParent(): ?self

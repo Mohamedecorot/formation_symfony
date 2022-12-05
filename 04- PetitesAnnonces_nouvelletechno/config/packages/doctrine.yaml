@@ -14,10 +14,7 @@ doctrine:
                 is_bundle: false
                 dir: '%kernel.project_dir%/src/Entity'
                 prefix: 'App\Entity'
-                alias:
-        dql:
-            string_functions:
-                MATCH_AGAINST: App\Extensions\Doctrine\MatchAgainst
+                alias: App
 
 when@test:
     doctrine:
