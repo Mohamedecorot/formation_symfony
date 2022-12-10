@@ -1,0 +1,40 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}{{ annonce.title }}{% endblock %}
+
+{% block body %}
+<div class="container">
+    <div class="caroulix" id="carousel" data-ax="caroulix" data-ax-caroulix-autoplay-enabled="true" data-caroulix-indicators-enabled="true">
+        <div class="caroulix-arrow caroulix-prev">
+          <span class="iconify-inline font-s5" data-icon="mdi:chevron-left"></span>
+        </div>
+        <div class="caroulix-arrow caroulix-next">
+          <span class="iconify-inline font-s5" data-icon="mdi:chevron-right"></span>
+        </div>
+        {% for image in annonce.images %}
+            <div class="caroulix-item">
+                <img src="{{ asset('uploads/images/annonces/' ~ image.name) }}" height="150px" width="150px !important" alt="{{ annonce.title }}">
+            </div>
+        {% endfor %}
+    </div>
+
+    <div class="grix xs2 sm3 sm3-gutter-0 card">
+        <div class="d-flex fx-col fx-grow">
+            <div class="card-header">{{ annonce.title }}</div>
+            <div class="card-content">
+                <p>Catégorie : {{ annonce.categories.name }}</p>
+                <p>{{ annonce.content|raw }}</p>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}
+
+{% block javascripts %}
+    <script>
+        let caroulix = new Axentix.Caroulix('#carousel');
+
+        // Syntax : caroulix.{method}
+        caroulix.next();
+    </script>
+{% endblock  %}

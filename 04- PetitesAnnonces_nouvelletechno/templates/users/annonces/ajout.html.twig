@@ -1,6 +1,11 @@
 {% extends 'base.html.twig' %}
 
 {% block title %}Ajouter une annonce{% endblock %}
+{% block stylesheet %}
+{% endblock %}
+{% block stylesheets %}
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/axentix@2.1.0/dist/axentix.min.css" />
+{% endblock %}
 
 {% block body %}
     <div class="container">
@@ -13,7 +18,7 @@
                 <h2>Images</h2>
                 {% for image in annonce.images %}
                     <div>
-                        <img src="{{ asset('/uploads/'~image.name) }}" alt="" width="150">
+                        <img src="{{ asset('/uploads/images/annonces/'~image.name) }}" alt="" width="150">
 
                         {# On ajoute un lien permettant de supprimer une image (sera géré en Ajax) #}
                         <a class="btn red"href="{{ path('annonces_delete_image', {id: image.id})}}" data-delete data-token="{{ csrf_token('delete' ~ image.id )}}">Supprimer</a>

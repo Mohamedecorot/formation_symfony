@@ -20,6 +20,11 @@ class Images
     #[ORM\JoinColumn(nullable: false)]
     private ?Annonces $annonces = null;
 
+    public function __toString()
+    {
+        return $this->name;
+    }
+
     public function getId(): ?int
     {
         return $this->id;
