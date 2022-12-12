@@ -3,23 +3,36 @@
 namespace App\Controller;
 
 use App\Form\ContactType;
+use App\Form\SearchAnnonceType;
 use App\Repository\AnnoncesRepository;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\Request;
-use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Mailer\MailerInterface;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 class MainController extends AbstractController
 {
     #[Route('/', name: 'app_home')]
-    public function index(AnnoncesRepository $annoncesRepository): Response
+    public function index(AnnoncesRepository $annoncesRepository, Request $request): Response
     {
-        // var_dump($annoncesRepository);
-        // die();
+        $annonces = $annoncesRepository->findBy(['active' => true], ['created_at' => 'desc'], 5);
+
+        $form = $this->createForm(SearchAnnonceType::class);
+        $search = $form->handleRequest($request);
+
+        if($form->isSubmitted() && $form->isValid()){
+            // On recherche les annonces correspondant aux mots clés
+            $annonces = $annoncesRepository->search(
+                $search->get('mots')->getData(),
+                $search->get('categorie')->getData()
+            );
+        }
+
         return $this->render('main/index.html.twig', [
-            'annonces' => $annoncesRepository->findBy(['active' => true], ['created_at' => 'desc']),
+            'annonces' => $annonces,
+            'form' => $form->createView()
         ]);
     }
 

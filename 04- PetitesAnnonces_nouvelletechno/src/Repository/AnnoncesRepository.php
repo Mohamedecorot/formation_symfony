@@ -21,6 +21,25 @@ class AnnoncesRepository extends ServiceEntityRepository
         parent::__construct($registry, Annonces::class);
     }
 
+    /**
+     * Recherche les annonces en fonction du formulaire
+     * @return void
+     */
+    public function search($mots = null, $categorie = null){
+        $query = $this->createQueryBuilder('a');
+        $query->where('a.active = 1');
+        if($mots != null){
+            $query->andWhere('MATCH_AGAINST(a.title, a.content) AGAINST (:mots boolean)>0')
+                  ->setParameter('mots', $mots);
+        }
+        if($categorie != null){
+            $query->leftJoin('a.categories', 'c');
+            $query->andWhere('c.id = :id')
+                  ->setParameter('id', $categorie);
+        }
+        return $query->getQuery()->getResult();
+    }
+
     public function add(Annonces $entity, bool $flush = false): void
     {
         $this->getEntityManager()->persist($entity);
