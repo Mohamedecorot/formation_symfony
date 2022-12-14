@@ -2,6 +2,8 @@
 
 namespace App\Controller;
 
+use Dompdf\Dompdf;
+use Dompdf\Options;
 use App\Entity\Images;
 use App\Entity\Annonces;
 use App\Form\AnnoncesType;
@@ -9,8 +11,8 @@ use App\Form\EditProfileType;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpFoundation\JsonResponse;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
 class UsersController extends AbstractController
@@ -106,6 +108,52 @@ class UsersController extends AbstractController
         ]);
     }
 
+    #[Route('/users/data', name: 'users_data')]
+    public function usersData()
+    {
+        return $this->render('users/data.html.twig');
+    }
+
+    /**
+     * @Route("/users/data/download", name="users_data_download")
+     */
+    public function usersDataDownload()
+    {
+        // On définit les options du PDF
+        $pdfOptions = new Options();
+        // Police par défaut
+        $pdfOptions->set('defaultFont', 'Arial');
+        $pdfOptions->setIsRemoteEnabled(true);
+
+        // On instancie Dompdf
+        $dompdf = new Dompdf($pdfOptions);
+        $context = stream_context_create([
+            'ssl' => [
+                'verify_peer' => FALSE,
+                'verify_peer_name' => FALSE,
+                'allow_self_signed' => TRUE
+            ]
+        ]);
+        $dompdf->setHttpContext($context);
+
+        // On génère le html
+        $html = $this->renderView('users/download.html.twig');
+
+        $dompdf->loadHtml($html);
+        $dompdf->setPaper('A4', 'portrait');
+        $dompdf->render();
+
+        // On génère un nom de fichier
+        $fichier = 'user-data-'. $this->getUser()->getId() .'.pdf';
+
+        // On envoie le PDF au navigateur
+        $dompdf->stream($fichier, [
+            'Attachment' => true
+        ]);
+
+        return new Response();
+    }
+
     /**
      * @Route("/supprime/image/{id}", name="annonces_delete_image", methods={"DELETE"})
      */
@@ -153,7 +201,7 @@ class UsersController extends AbstractController
         ]);
     }
 
-    #[Route('/users/pass/modifier', name: 'users_pass_modifier')]
+    #[Route('/users/pass', name: 'users_pass_modifier')]
     public function editPass(Request $request, UserPasswordEncoderInterface $passwordEncoder)
     {
         if($request->isMethod('POST')){
