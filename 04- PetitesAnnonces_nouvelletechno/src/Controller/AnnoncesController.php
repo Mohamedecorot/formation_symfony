@@ -5,11 +5,15 @@ namespace App\Controller;
 use App\Entity\Annonces;
 use App\Form\AnnonceContactType;
 use App\Repository\AnnoncesRepository;
+use App\Repository\CategoriesRepository;
+use Symfony\Contracts\Cache\ItemInterface;
+use Symfony\Contracts\Cache\CacheInterface;
 use Symfony\Bridge\Twig\Mime\TemplatedEmail;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\Mailer\MailerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
+use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
@@ -18,8 +22,31 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
  */
 class AnnoncesController extends AbstractController
 {
+    /**
+     * @Route("/", name="liste")
+     * @return void
+     */
+    public function index(AnnoncesRepository $annoncesRepo, CategoriesRepository $catRepo, Request $request, CacheInterface $cache){
+        // On définit le nombre d'éléments par page
+        $limit = 2;
+
+        // On récupère le numéro de page
+        $page = (int)$request->query->get("page", 1);
+
+        // On récupère les filtres
+        $filters = $request->get("categories");
+
+        // On récupère les annonces de la page en fonction du filtre
+        $annonces = $annoncesRepo->getPaginatedAnnonces($page, $limit, $filters);
+
+        // On récupère le nombre total d'annonces
+        $total = $annoncesRepo->getTotalAnnonces($filters);
+
+        return $this->render('annonces/index.html.twig', compact('annonces', 'total', 'limit', 'page'));
+    }
+
     #[Route('/details/{slug}', name: 'details')]
-    public function index($slug, AnnoncesRepository $annoncesRepository, Request $request, MailerInterface $mailer): Response
+    public function details($slug, AnnoncesRepository $annoncesRepository, Request $request, MailerInterface $mailer): Response
     {
         $annonce = $annoncesRepository->findOneBy(['slug' => $slug]);
 
